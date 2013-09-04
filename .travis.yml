@@ -7,7 +7,7 @@ before_install:
   - sudo apt-get update
   - sudo dpkg --get-selections
   - sudo apt-get remove -qq postgresql-9.1
-  - sudo apt-get install -qq postgresql-server-dev-all
+  - sudo apt-get install -qq sendfile postgresql-server-dev-all
   - git config --global user.name "Build package TravisCI"
   - git config --global user.email $HOSTNAME":not-for-mail@travis-ci.org"
 language: c
