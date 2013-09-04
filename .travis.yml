@@ -1,0 +1,19 @@
+---
+env:
+  matrix:
+    - POSTGRES_VERSION=9.1.0
+before_install:
+  - rm .travis.yml
+  - sudo apt-get update
+  - sudo dpkg --get-selections
+  - sudo apt-get install -qq postgresql-server-dev-all
+  - git config --global user.name "Build package TravisCI"
+  - git config --global user.email $HOSTNAME":not-for-mail@travis-ci.org"
+language: c
+script:
+  - export LSB_RELEASE=$( lsb_release -rs )
+  - wget -q http://ftp.postgresql.org/pub/source/v$POSTGRES_VERSION/postgresql-$POSTGRES_VERSION.tar.gz
+  - tar xvzf postgresql-$POSTGRES_VERSION.tar.gz
+  - ( cd postgresql-$POSTGRES_VERSION && ./configure --prefix=/home/travis/postgresql-$POSTGRES_VERSION && make && make install )
+  - tar cvzf postgresql-$POSTGRES_VERSION.travis.$LSB_RELEASE.tar.gz /home/travis/postgresql-$POSTGRES_VERSION
+  - sendfile postgresql-$POSTGRES_VERSION.travis.$LSB_RELEASE.tar.gz getty@stardestroyer.de
